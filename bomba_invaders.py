@@ -14,14 +14,14 @@ pygame.display.set_caption("Kapitan Bomba - Ciu Ciu Laserkami")
 
 # wczytywanie grafik stateczków
 red_space_ship = pygame.image.load(
-    os.path.join("assets", "pixel_ship_red_small.png"))
+    os.path.join("assets", r"pixel_ship_red_small.png"))
 green_space_ship = pygame.image.load(
-    os.path.join("assets", "pixel_ship_green_small.png"))
+    os.path.join("assets", r"pixel_ship_green_small.png"))
 blue_space_ship = pygame.image.load(
-    os.path.join("assets", "pixel_ship_blue_small.png"))
+    os.path.join("assets", r"pixel_ship_blue_small.png"))
 # protagonista tego filmu drogi
 yellow_space_ship = pygame.image.load(
-    os.path.join("assets", "pixel_ship_yellow.png"))
+    os.path.join("assets", r"pixel_ship_yellow.png"))
 
 # background assets & other stuff
 
@@ -103,5 +103,5 @@ def main():
 
 main()  # zamkniecie głównej petli
 
-# https://youtu.be/Q-__8Xw9KTM?t=2626
+
 # dodanie postaci i implementacja poruszania się, next step
