@@ -72,7 +72,7 @@ class Enemy(Ship):
     COLOR_MAP = {
                 "red" : (red_space_ship, red_laser),
                 "green" : (green_space_ship, green_laser),
-                "blue" : (blue_space_shipm blue_laser),
+                "blue" : (blue_space_ship, blue_laser)
     }
     def __init__(self, x, y, color, health = 100):
         super().__init__(x, y, health)
