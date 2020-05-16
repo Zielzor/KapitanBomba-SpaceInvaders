@@ -85,9 +85,15 @@ class Enemy(Ship):
 def main():
     run = True
     FPS = 60
-    level = 1
+    level = 0
     lives = 5
+    
     main_font = pygame.font.SysFont("comicsans", 35)
+    lost_font = pygame.font.SysFont("comicsans", 45)
+
+    enemies = [] 
+    wave_lenght = 5
+    enemy_vel =  1 
         
     player_velocity = 5 
 
@@ -95,7 +101,8 @@ def main():
 
     clock = pygame.time.Clock()
 
-    
+    lost = False
+    lost_count = 0    
 
     def redraw_window():
         WINDOW.blit(back_ground, (0, 0))
@@ -105,13 +112,38 @@ def main():
         WINDOW.blit(label_lives, (10, 10))
         WINDOW.blit(label_level, (WIDTH - label_level.get_width() - 10, 10))
         
+        for enemy in enemies:
+            enemy.draw(WINDOW)
+
         player.draw(WINDOW)
+
+        if lost:
+            lost_label = lost_font.render("DEFECATED", 1 , (255,255,255))
+            WINDOW.blit(lost_label,(WIDTH/2 - lost_label.get_width()/2,320))
 
         pygame.display.update()
 
     while run:
         clock.tick(FPS)  # sprawdzenia ciągłości 60xminute
-        redraw_window()
+        redraw_window() 
+        if lives <= 0 or player.health <=0:
+            lost = True
+            lost_count += 1
+
+        if lost: #jeżeli lost = true
+            if lost_count > FPS * 3 :
+                run = False
+            else:
+                continue
+
+        if len(enemies) == 0:
+            level += 1
+            wave_lenght += 5 
+            for i in range(wave_lenght):
+                enemy = Enemy(random.randrange(50, WIDTH-100), random.randrange(-150,-100), random.choice(["red","blue","green"]))
+                enemies.append(enemy)
+
+        
 
         for event in pygame.event.get():  # sprwadzenie eventow i regowanie jezeli wystapiły
             if event.type == pygame.QUIT:  # raczej zrozumiale, jeżeli  zamkniemy okno, gra sie konczy
@@ -127,11 +159,20 @@ def main():
         if keys[pygame.K_s] and player.y + player_velocity + player.get_height() < HEIGHT: # w dół
             player.y += player_velocity
 
+
+        for enemy in enemies[:]:
+            enemy.move(enemy_vel)
+        if enemy.y + enemy.get_height() > HEIGHT:
+            lives -= 1
+            enemies.remove(enemy) 
+
+        
+
 main()  # zamkniecie głównej petli
 
 
-# nastepnie: spawnowanie sie statkow, poruszanie sie i laserki
+#nastepnie: dodanie kolizji i laserów  
 
 
-# dodanie postaci i implementacja poruszania się, next step
+
 
