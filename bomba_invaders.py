@@ -21,7 +21,7 @@ blue_space_ship = pygame.image.load(
     os.path.join("assets", r"pixel_ship_blue_small.png"))
 # protagonista tego filmu drogi
 yellow_space_ship = pygame.image.load(
-    os.path.join("assets", r"pixel_ship_yellow.png"))
+    os.path.join("assets_bomba", r"orzel_1_player.png"))
 
 # background assets & other stuff
 
@@ -235,7 +235,7 @@ def main():
             player.x += player_velocity
         if keys[pygame.K_w] and player.y - player_velocity > 0: # do góry
             player.y -= player_velocity
-        if keys[pygame.K_s] and player.y + player_velocity + player.get_height() < HEIGHT: # w dół
+        if keys[pygame.K_s] and player.y + player_velocity + player.get_height() + 10 < HEIGHT: # w dół
             player.y += player_velocity
         if keys[pygame.K_SPACE]:
             player.shoot()
