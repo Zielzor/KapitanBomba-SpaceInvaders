@@ -85,7 +85,7 @@ class Ship:
                 self.lasers.remove(laser)
             elif laser.collision(obj):
                 obj.health -= 10 
-                self.laser.remove(laser) 
+                self.lasers.remove(laser) 
 
     def get_width(self):
         return self.ship_img.get_width()
@@ -125,6 +125,14 @@ class Player(Ship):
                     if laser.collision(obj):
                         objs.remove(obj) 
                         self.lasers.remove(laser)
+    
+    def draw(self,window):
+        super().draw(window)
+        self.health_bar(window)
+
+    def health_bar(self,window):
+        pygame.draw.rect(window, (255,0,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(),10))
+        pygame.draw.rect(window, (0,255,0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (self.health/self.max_health) ,10))
 
 class Enemy(Ship):
     COLOR_MAP = {
@@ -139,6 +147,12 @@ class Enemy(Ship):
 
     def move(self, vel):
         self.y += vel #tylko y wrogowie poruszają się z goóry na dół
+    def shoot(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x-10, self.y, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+
 
 
 def collide(obj1,obj2):#collide jest poza klasą ship
@@ -160,7 +174,7 @@ def main():
     enemy_vel =  1 
         
     player_velocity = 5
-    laser_velocity = 4  
+    laser_velocity = 6 
 
     player = Player(300, 530)
 
@@ -229,16 +243,40 @@ def main():
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
             enemy.move_lasers(laser_velocity,player)
-            if enemy.y + enemy.get_height() > HEIGHT:
+
+            if random.randrange(0, 4*60) == 1:
+                enemy.shoot()
+
+            if collide(enemy, player):
+                player.health -= 10
+                enemies.remove(enemy)
+            elif enemy.y + enemy.get_height() > HEIGHT:
                 lives -= 1
-                enemies.remove(enemy) 
+                enemies.remove(enemy)
 
-        player.move_lasers(laser_velocity, enemies)   
+            
 
 
-        
+        player.move_lasers(-laser_velocity, enemies)  
 
-main()  # zamkniecie głównej petli
+def menu():
+    menu_font = pygame.font.SysFont("comicsans", 50)
+    run = True
+    while run:
+        WINDOW.blit(back_ground,(0,0))
+        menu_label = menu_font.render("Myk kursorkiem to start...", 1, (255,255,255))
+        WINDOW.blit(menu_label, (WIDTH/2 - menu_label.get_width()/2, 350))
+
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                main()
+
+    pygame.quit()
+
+menu()  # zamkniecie głównej petli
 
 
 #nastepnie: dodanie kolizji i laserów  
