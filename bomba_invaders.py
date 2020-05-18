@@ -124,7 +124,7 @@ class Player(Ship):
                 for obj in objs:
                     if laser.collision(obj):
                         objs.remove(obj) 
-                        self.laser.remove(laser)
+                        self.lasers.remove(laser)
 
 class Enemy(Ship):
     COLOR_MAP = {
